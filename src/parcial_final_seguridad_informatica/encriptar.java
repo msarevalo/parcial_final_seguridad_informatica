@@ -26,9 +26,8 @@ public class encriptar {
 		abc.add('x'); abc.add('y');
 		abc.add('z'); abc.add('_');
 		
-		String cadena = "anti";
-		cadena = cadena.replace(" ", "_");
-		cadena = cadena.toLowerCase();
+		String cadena = "";
+		String encriptado = "";
 		double acumulado = 0;
 		double valor = 0;
 		double base = Math.pow(28, 4);
@@ -38,8 +37,10 @@ public class encriptar {
 		double be = 0;
 		int primero = 0;
 		int segundo = 0;
+		int text = 0;
 		Scanner usera = new Scanner(System.in);
 		Scanner userb = new Scanner(System.in);
+		Scanner texto = new Scanner(System.in);
 		
 		while(primero == 0) {
 			System.out.println("Ingresar la primera clave: ");
@@ -77,39 +78,63 @@ public class encriptar {
 
 		//System.out.println(MCD_Euclides(a, base));
 		//System.out.println(abc.indexOf('z'));
-		
-		for (int i=0; i<cadena.length(); i++) {
-			//System.out.println(cadena.charAt(i));
-			if (i==0) {
-				valor = abc.indexOf(cadena.charAt(i)) * Math.pow(28,3);
+		while(text==0) {
+			System.out.println("Ingresar el texto a encriptar: ");
+			cadena = texto.nextLine();
+			cadena = cadena.replace(" ", "_");
+			cadena = cadena.toLowerCase();
+			if((cadena.length()%4)==0) {
+				for (int i=0; i<cadena.length(); i=i+4) {
+					String palabra = "";
+					palabra = palabra + cadena.charAt(i);
+					palabra = palabra + cadena.charAt(i+1);
+					palabra = palabra + cadena.charAt(i+2);
+					palabra = palabra + cadena.charAt(i+3);
+					
+					System.out.println(palabra);
+					
+					acumulado = 0;
+					
+					for (int j=0; j<palabra.length(); j++) {
+						//System.out.println(cadena.charAt(i));
+						if (j==0) {
+							valor = abc.indexOf(palabra.charAt(j)) * Math.pow(28,3);
+						}
+						if (j==1) {
+							valor = abc.indexOf(palabra.charAt(j)) * Math.pow(28,2);
+						}
+						if (j==2) {
+							valor = abc.indexOf(palabra.charAt(j)) * Math.pow(28,1);
+						}
+						if (j==3) {
+							valor = abc.indexOf(palabra.charAt(j)) * Math.pow(28,0);
+						}
+						acumulado = acumulado + valor;
+					}
+					
+					//System.out.println(acumulado);
+					
+					double e = ((a*acumulado)+b)%base;
+			
+					int letra1 = (int)(e / Math.pow(28, 3));
+					int letra2 = (int)((e % Math.pow(28, 3)) / Math.pow(28, 2));
+					int letra3 = (int)(((e % Math.pow(28, 3)) % Math.pow(28, 2)) / Math.pow(28, 1));
+					int letra4 = (int)(e % 28);
+					
+					//System.out.println(abc.get(letra1) + "" + abc.get(letra2) + "" + abc.get(letra3) + "" + abc.get(letra4));
+					
+					encriptado = encriptado + abc.get(letra1) + "" + abc.get(letra2) + "" + abc.get(letra3) + "" + abc.get(letra4);
+					
+					/*System.out.println(encriptado);
+					text++;*/
+				}
+				System.out.println(encriptado);
+				text++;
+				//System.out.println(abc.get(letra1) + " " + abc.get(letra2) + " " + abc.get(letra3) + " " + abc.get(letra4));
+			}else {
+				System.out.println("El largo de la palabra debe ser multiplo de 4");
 			}
-			if (i==1) {
-				valor = abc.indexOf(cadena.charAt(i)) * Math.pow(28,2);
-			}
-			if (i==2) {
-				valor = abc.indexOf(cadena.charAt(i)) * Math.pow(28,1);
-			}
-			if (i==3) {
-				valor = abc.indexOf(cadena.charAt(i)) * Math.pow(28,0);
-			}
-			acumulado = acumulado + valor;
 		}
-		
-		//System.out.println(acumulado);
-		
-		double e = ((a*acumulado)+b)%base;
-
-		int letra1 = (int)(e / Math.pow(28, 3));
-		int letra2 = (int)((e % Math.pow(28, 3)) / Math.pow(28, 2));
-		int letra3 = (int)(((e % Math.pow(28, 3)) % Math.pow(28, 2)) / Math.pow(28, 1));
-		int letra4 = (int)(e % 28);
-		
-		String encriptado;
-		encriptado = abc.get(letra1) + "" + abc.get(letra2) + "" + abc.get(letra3) + "" + abc.get(letra4);
-		
-		System.out.println(encriptado);
-		//System.out.println(abc.get(letra1) + " " + abc.get(letra2) + " " + abc.get(letra3) + " " + abc.get(letra4));
-
 	}
 	
 	private static double MCD_Euclides(double a, double b){
